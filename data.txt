@@ -1,40 +1,24 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: ReplicaSet
 metadata:
-  name: php-apache
+  name: nginx-rs
 spec:
-  selector:
-    matchLabels:
-      run: php-apache
-  replicas: 1
+  replicas: 3
   template:
     metadata:
+      name: nginx-pod
       labels:
-        run: php-apache
+        app: nginx-app
+        tier: frontend
     spec:
       containers:
-      - name: php-apache
-        image: k8s.gcr.io/hpa-example
+      - name: nginx-container
+        image: nginx
         ports:
         - containerPort: 80
-        resources:
-          limits:
-            memory: 500Mi
-            cpu: 100m
-          requests:
-            memory: 250Mi
-            cpu: 80m
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: php-apache-service
-  labels:
-    run: php-apache
-spec:
-  ports:
-  - port: 80
-    nodePort: 30002
   selector:
-    run: php-apache 
-  type: NodePort
+    matchLabels:
+      app: nginx-app
+    matchExpressions:
+      - {key: tier, operator: In, values: [frontend]}
+
