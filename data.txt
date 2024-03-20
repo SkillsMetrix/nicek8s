@@ -1,43 +1,19 @@
-
 apiVersion: v1
-kind: Pod
+kind: ReplicationController
 metadata:
-  name: nolabel
-  
+  name: nginx-rc
 spec:
-  containers:
-  - name: nolabel-container
-    image: nginx
-
-
-
-
-
-----
-
-
-apiVersion: v1
-kind: Pod
-metadata:
-  name: single-label
-  labels:
-    app: nginx
-    
-spec:
-  containers:
-  - name: single-label
-    image: nginx
-
-----
-
-apiVersion: v1
-kind: Pod
-metadata:
-  name: multi-label
-  labels:
-    app: nginx
-    tier: dev
-spec:
-  containers:
-  - name: multi-label
-    image: nginx
+  replicas: 3
+  template:
+    metadata:
+      name: nginx-pod
+      labels:
+        app: nginx-app
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx
+        ports:
+        - containerPort: 80
+  selector:
+    app: nginx-app
