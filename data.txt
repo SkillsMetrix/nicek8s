@@ -1,40 +1,20 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
 metadata:
-  name: php-apache
+  name: hello-world
 spec:
-  selector:
-    matchLabels:
-      run: php-apache
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        run: php-apache
-    spec:
-      containers:
-      - name: php-apache
-        image: k8s.gcr.io/hpa-example
-        ports:
-        - containerPort: 80
-        resources:
-          limits:
-            memory: 500Mi
-            cpu: 100m
-          requests:
-            memory: 250Mi
-            cpu: 80m
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: php-apache-service
-  labels:
-    run: php-apache
-spec:
-  ports:
-  - port: 80
-    nodePort: 30002
-  selector:
-    run: php-apache 
-  type: NodePort
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: hello-world
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 50
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageValue: 100Mi
