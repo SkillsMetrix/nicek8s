@@ -1,16 +1,32 @@
+  apiVersion: v1
+kind: Service
+metadata:
+  name: myservice
+spec:
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 9376
+
+
+
+
+
+--------
+
 apiVersion: v1
 kind: Pod
 metadata:
-  name: nginx-caching-server
+  name: myapp-pod
   labels:
-    purpose: demonstrate-multi-container-pod
+    app: myapp
 spec:
+  initContainers:
+  - name: init-myservice
+    image: busybox:1.28
+    command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 5; done;']
+  
   containers:
-  - name: nginx-container1
-    image: nginx
-
-  - name: busybox-container2
-    image: busybox
-    command: 
-      - sleep
-      - "3600"
+  - name: myapp-container
+    image: busybox:1.28
+    command: ['sh', '-c', 'echo The app is running! && sleep 3600']
