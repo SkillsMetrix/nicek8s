@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-pd
+  name: nginx-hostpath
 spec:
   containers:
-  - image: k8s.gcr.io/test-webserver
-    name: test-container
-    volumeMounts:
-    - mountPath: /test-pd
-      name: test-volume
+    - name: nginx-container
+      image: nginx
+      volumeMounts:
+      - mountPath: /test-mnt
+        name: test-vol
   volumes:
-  - name: test-volume
+  - name: test-vol
     hostPath:
-      path: /usr/local
-      type: Directory
+      path: /test-vol
+
