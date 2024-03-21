@@ -1,25 +1,16 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: sidecar-pod
+  name: test-pd
 spec:
-  volumes:
-  - name: logs 
-    emptyDir: {}
-
   containers:
-  - name: app-container
-    image: alpine
-    command: ["/bin/sh"]
-    args: ["-c", "while true; do date >> /var/log/app.log; sleep 5; done"]
+  - image: k8s.gcr.io/test-webserver
+    name: test-container
     volumeMounts:
-    - name: logs
-      mountPath: /var/log
-      
-  - name: log-exporter-sidecar
-    image: nginx
-    ports:
-      - containerPort: 80
-    volumeMounts:
-    - name: logs
-      mountPath: /usr/share/nginx/html
+    - mountPath: /test-pd
+      name: test-volume
+  volumes:
+  - name: test-volume
+    hostPath:
+      path: /usr/local
+      type: Directory
