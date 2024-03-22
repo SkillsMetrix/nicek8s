@@ -1,17 +1,15 @@
 apiVersion: v1
-kind: Endpoints
+kind: Service
 metadata:
-  name: custom-service
-subsets:
-  - addresses:
-      - ip: 10.244.0.45
-      - ip: 10.244.0.28
-    ports:
-      - port: 80
+  name: custom-dynamic-service
+spec:
+  selector:
+    env: prod
+  ports:
+    - port: 8080
+      targetPort: 80
 
-
-
-
+-----
 
 
 apiVersion: v1
