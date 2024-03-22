@@ -1,26 +1,24 @@
-  apiVersion: apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: redis-deployment
+  name: nginx-deployment-1.0
   labels:
-    app: redis
-
+    app: nginx-1.0
+    env: prod
 spec:
-  replicas: 15
+  replicas: 1
   selector:
     matchLabels:
-      app: redis
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 2
-      maxUnavailable: 2
-  minReadySeconds: 10
+      app: nginx-1.0
+      env: prod
   template:
     metadata:
       labels:
-        app: redis
+        app: nginx-1.0
+        env: prod
     spec:
       containers:
-        - name: redis-container
-          image: redis:6.0 #Upgrade to 6.0 --> 6.0.16 --> 6.2.6
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
