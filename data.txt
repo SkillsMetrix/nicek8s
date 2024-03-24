@@ -1,5 +1,7 @@
-https://exams.vinsys.com/exam/DockerKubernetesTest22March2024
+Kubernetes materials
 
+https://github.com/SkillsMetrix/dockernk8s.git
 
-
- https://nice-feedback.vinsys.com/Indiafeedback.html?batch_id%3D309
+Amarjeet Singh
+amarjeet.arora@asreet-tech.com
+9552894129
